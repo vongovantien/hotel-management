@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { listProduct } from "../../redux/actions/ProductActions";
-import CartItem from "../CartItem";
+import CartItem from "../CartItem/CartItem";
 const ShopSection = () => {
     const dispatch = useDispatch();
 

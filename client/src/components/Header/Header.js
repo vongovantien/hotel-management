@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import logo from "../public/logo.svg";
+import logo from "../../assets/logo.svg";
 import "./Header.css";
 const Header = () => {
     return (
@@ -23,9 +23,13 @@ const Header = () => {
                     <li className="nav-item">Contact</li>
                 </ul>
                 <div className="d-flex align-items-center">
-                    <Button variant="danger">Register</Button>
+                    <Link to="/login">
+                        <Button variant="danger">Login</Button>
+                    </Link>
                     &nbsp;
-                    <Button variant="danger">Login</Button>
+                    <Link to="/register">
+                        <Button variant="danger">Register</Button>
+                    </Link>
                 </div>
             </div>
         </div>
