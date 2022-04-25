@@ -1,31 +1,55 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Card, Container, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { register } from "../redux/actions/UserAction";
-import { Link, useNavigate } from "react-router-dom";
-const Register = ({ location, history }) => {
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { updateUserProfile } from "../../redux/actions/UserAction";
+import Toast from "../LoadingError/Toast";
+
+const ProfileTab = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
-    const navigate = useNavigate();
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const toastId = React.useRef(null);
     const dispatch = useDispatch();
-    const userRegister = useSelector((state) => state.userRegister);
-    const { error, loading, userInfo } = userRegister;
+    const userDetails = useSelector((state) => state.userDetails);
+    const { loading, error, user } = userDetails;
+
+    const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
+    const { loading: updateLoading } = userUpdateProfile;
+
+    const ToastObject = {
+        pauseOnFocusLoss: false,
+        draggable: false,
+        pauseOnHover: false,
+        autoClose: 2000,
+    };
 
     const submitHandler = (e) => {
         e.preventDefault();
-        dispatch(register(name, email, password));
-    };
-
-    useEffect(() => {
-        if (userInfo) {
-            navigate("/login");
+        if (password !== confirmPassword) {
+            if (!toast.isActive(toastId.current)) {
+                toastId.current = toast.error(
+                    "Password does not match",
+                    ToastObject
+                );
+            } else {
+                dispatch(
+                    updateUserProfile({ id: user._id, name, email, password })
+                );
+                if (!toastId.isActive(toastId.current)) {
+                    toastId.current = toast.success(
+                        "Profile updated",
+                        ToastObject
+                    );
+                }
+            }
         }
-    }, [userInfo]);
-
+    };
     return (
         <>
+            <Toast />
             {error && <h1 className="text-danger">{error}</h1>}
             {loading && <span>Loading...</span>}
             <Container fluid="md" className="mt-5">
@@ -56,6 +80,16 @@ const Register = ({ location, history }) => {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                         </Form.Group>
+                        <Form.Group className="mb-3" controlId="password">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) =>
+                                    setConfirmPassword(e.target.value)
+                                }
+                            />
+                        </Form.Group>
                         <Button variant="primary" type="submit">
                             Login
                         </Button>
@@ -68,4 +102,4 @@ const Register = ({ location, history }) => {
     );
 };
 
-export default Register;
+export default ProfileTab;

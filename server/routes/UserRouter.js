@@ -26,22 +26,31 @@ userRoute.post(
     })
 );
 
-userRoute.get(
+userRoute.put(
     "/profile",
     protect,
     asyncHandler(async (req, res) => {
-        const { email, password } = req.body;
         const user = await User.findById(req.user._id);
         if (user) {
-            res.status(200).json({
-                _id: user._id,
-                name: user.name,
-                email: user.email,
-                isAdmin: user.isAdmin,
-                createdAt: user.createdAt,
+            user.name = req.body.name || user.name;
+            user.name = req.body.name || user.name;
+            if (req.body.password) {
+                user.password = req.body.password;
+            } else {
+                res.status(404);
+                throw new Error("User not found");
+            }
+            const updateUser = await user.save();
+            res.json({
+                _id: updateUser._id,
+                name: updateUser.name,
+                email: updateUser.email,
+                isAdmin: updateUser.isAdmin,
+                createAt: updateUser.createAt,
+                token: generateToken(updateUser._id),
             });
         } else {
-            res.status(401);
+            res.status(404);
             throw new Error("User not found !!");
         }
     })
