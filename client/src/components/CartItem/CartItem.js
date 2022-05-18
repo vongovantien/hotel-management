@@ -6,7 +6,7 @@ const CartItem = ({ prop }) => {
     return (
         <div className="col-md-4 p-3">
             <Card>
-                {/* <Card.Img variant="top" src="{prop.image}" /> */}
+                <Card.Img variant="top" src={prop.image} />
                 <Card.Body className="text-center">
                     <Card.Title>{prop.name}</Card.Title>
                     <Card.Text>{prop.description}</Card.Text>

@@ -52,6 +52,7 @@ const ProfileTab = () => {
             <Toast />
             {error && <h1 className="text-danger">{error}</h1>}
             {loading && <span>Loading...</span>}
+            {updateLoading && <span>Loading...</span>}
             <Container fluid="md" className="mt-5">
                 <Card className="p-4 mx-auto" style={{ width: "36rem" }}>
                     <Form onSubmit={submitHandler}>

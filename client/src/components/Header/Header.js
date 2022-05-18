@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Dropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +10,7 @@ const Header = () => {
     const navigate = useNavigate();
     const userLogin = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
+    const [keyword, setKeyword] = useState();
 
     const logoutHandler = () => {
         dispatch(logout);

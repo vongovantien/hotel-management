@@ -1,27 +1,34 @@
 const express = require("express");
 const asyncHandler = require("express-async-handler");
 const Product = require("../models/ProductModel.js");
-
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const multer = require("multer");
+const productController = require("../controllers/ProductController.js");
 const productRoute = express.Router();
+const protect = require("../middleware/AuthMiddleware.js");
 
-productRoute.get(
-    "/",
-    asyncHandler(async (req, res) => {
-        const products = await Product.find({});
-        res.json(products);
-    })
-);
-productRoute.get(
-    "/:id",
-    asyncHandler(async (req, res) => {
-        const product = await Product.findById(req.params.id);
-        if (product) {
-            return res.status(200).json(product);
-        } else {
-            res.status(404);
-            throw new Error("Product not found !!");
-        }
-    })
-);
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: "Products",
+    },
+});
+var upload = multer({ storage: storage });
+
+productRoute
+    .route("/:id/review")
+    .post(protect, productController.addProductReview)
+
+productRoute
+    .route("/:id")
+    .get(productController.getProductById)
+    .put(protect, productController.updateProduct)
+    .delete(protect, productController.deleteProduct)
+
+productRoute
+    .route("/")
+    .get(protect, productController.getProducts)
+    .post(protect, upload.single("image"), productController.addProduct);
 
 module.exports = productRoute;
