@@ -1,6 +1,7 @@
 const User = require("../models/UserModel.js");
+const generateToken = require("../utils/generateToken");
 
-login = async () => {
+login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (user && (await user.matchPassword(password))) {
@@ -27,7 +28,7 @@ getAllUsers = async (req, res) => {
     }
 };
 
-getUserById = async (req, res) => {
+profile = async (req, res) => {
     try {
         const user = await User.findById(req.user._id);
         if (user) {
@@ -57,7 +58,7 @@ getUserById = async (req, res) => {
     }
 };
 
-addUser = async (req, res) => {
+register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
         const userExist = await User.findOne({ email });
@@ -132,6 +133,10 @@ deleteUser = async (req, res) => {
         res.status(500).send(error.message);
     }
 };
+
+forgotPassword = async (req, res) => { };
+
+updatePassword = async (req, res) => { };
 
 module.exports = {
     login,

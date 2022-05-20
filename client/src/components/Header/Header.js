@@ -29,10 +29,10 @@ const Header = () => {
                     <span className="ms-2 text-brand">VT STORE</span>
                 </Link>
                 <ul className="nav header-items">
-                    <li className="nav-item">Home</li>
-                    <li className="nav-item">Product</li>
-                    <li className="nav-item">About</li>
-                    <li className="nav-item">Contact</li>
+                    <li className="nav-item"><Link to="/home">Home</Link></li>
+                    <li className="nav-item"><Link to="/products">Products</Link></li>
+                    <li className="nav-item"><Link to="/about">About</Link></li>
+                    <li className="nav-item"><Link to="/contact">Contact</Link></li>
                 </ul>
                 {userInfo ? (
                     <Dropdown>

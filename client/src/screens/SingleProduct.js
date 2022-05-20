@@ -19,7 +19,6 @@ const SingleProduct = ({ match }) => {
     }, [dispatch, productId]);
     return (
         <>
-            <Header />
             <div>
                 {loading ? (
                     <p>loading...</p>

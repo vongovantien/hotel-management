@@ -28,7 +28,7 @@ productRoute
 
 productRoute
     .route("/")
-    .get(protect, productController.getProducts)
+    .get(productController.getProducts)
     .post(protect, upload.single("image"), productController.addProduct);
 
 module.exports = productRoute;

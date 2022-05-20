@@ -2,8 +2,22 @@ const Category = require("../models/CategoryModel.js");
 
 exports.getCategories = async (req, res) => {
     try {
-        const categories = await Category.find();
-        res.status(200).json(categories);
+        let perPage = 100;
+        let page = req.query.page || 1;
+        await Category
+            .find()
+            .skip((perPage * page) - perPage)
+            .limit(perPage)
+            .exec((err, result) => {
+                Category.countDocuments((err, count) => {
+                    if (err) return next(err);
+                    res.status(200).json({
+                        result,
+                        current: page,
+                        pages: Math.ceil(count / perPage)
+                    });
+                });
+            });
     } catch (error) {
         res.status(500).send(error.message);
     }

@@ -2,8 +2,39 @@ const Product = require("../models/ProductModel.js");
 const cloudinary = require("cloudinary");
 getProducts = async (req, res) => {
     try {
-        const products = await Product.find();
-        res.status(200).json(products);
+        let perPage = 2; // số lượng sản phẩm xuất hiện trên 1 page
+        let page = req.params.page || 1;
+
+        const product = await Product
+            .find() // find tất cả các data
+            .skip((perPage * page) - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+            .limit(perPage)
+            .exec((err, products) => {
+                Product.countDocuments((err, count) => { // đếm để tính xem có bao nhiêu trang
+                    if (err) return next(err);
+                    res.json({
+                        products, // sản phẩm trên một page
+                        current: page, // page hiện tại
+                        pages: Math.ceil(count / perPage) // tổng số các page
+                    });
+                });
+            });
+
+        if (req.query.sort) {
+            if (req.query.sort = "NAME_ASC") {
+                product.sort({ name: 'asc' })
+            }
+            if (req.query.sort = "NAME_DESC") {
+                product.sort({ name: 'desc' })
+            }
+            if (req.query.sort = "PRICE_ASC") {
+                product.sort({ price: 'asc' })
+            }
+            if (req.query.sort = "PRICE_ASC") {
+                product.sort({ price: 'desc' })
+            }
+        }
+        // res.status(200).json(products);
     } catch (error) {
         res.status(500).send(error.message);
     }

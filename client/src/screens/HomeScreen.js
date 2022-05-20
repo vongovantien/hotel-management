@@ -8,11 +8,9 @@ import ShopSection from "../components/Home/ShopSection.js";
 const HomeScreen = () => {
     return (
         <div>
-            <Header />
             <ShopSection />
             <CallToActionSection />
             <ContactInfo />
-            <Footer />
         </div>
     );
 };

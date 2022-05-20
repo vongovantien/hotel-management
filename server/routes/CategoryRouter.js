@@ -7,7 +7,7 @@ categoryRoute
     .route("/:id")
     .get(categoryController.getCategoryById)
     .delete(categoryController.deleteCategory)
-    .get(categoryController.updateCategory);
+    .put(categoryController.updateCategory);
 
 categoryRoute
     .route("/")
