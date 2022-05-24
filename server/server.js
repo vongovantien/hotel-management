@@ -12,11 +12,16 @@ const userRoute = require("./routes/UserRouter");
 const categoryRoute = require("./routes/CategoryRouter");
 const orderRoute = require("./routes/OrderRouter");
 const cors = require("cors");
+
 dotenv.config();
 connectDatabase();
 const app = express();
 app.use(cors());
 
+app.get('/', (req, res) => {
+    res.send('Hello World!')
+  })
+  
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -46,6 +51,6 @@ app.use("/api/orders", orderRoute);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 1000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(5000, console.log(`server running in ${PORT}`));
