@@ -12,27 +12,57 @@ const userRoute = require("./routes/UserRouter");
 const categoryRoute = require("./routes/CategoryRouter");
 const orderRoute = require("./routes/OrderRouter");
 const cors = require("cors");
+const swaggerUI = require("swagger-ui-express");
+const swaggerJSDoc = require("swagger-jsdoc");
+
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Demo xây dựng của hàng tạp hóa",
+      version: "1.0.0",
+      description: "Coding by VNVT",
+    },
+    servers: [
+      {
+        url: "http://localhost:5000",
+      },
+    ],
+    host: "https://saleapp-backend.herokuapp.com/",
+
+    components: {
+      securitySchemes: {
+        Bearer: {
+          type: "apiKey",
+          name: "Authentication",
+          scheme: "bearer",
+          in: "header",
+        },
+      },
+    },
+    security: [
+      {
+        Bearer: [],
+      },
+    ],
+  },
+  apis: ["./routes/*.js"],
+};
+const specs = swaggerJSDoc(options);
 
 dotenv.config();
 connectDatabase();
 const app = express();
 app.use(cors());
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-  })
-  
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-    res.setHeader("Access-Control-Allow-Headers", "*");
-    res.header("Access-Control-Allow-Credentials", true);
-    next();
-});
-
-// app.use(cors())
+app.use("/swagger/", swaggerUI.serve, swaggerUI.setup(specs));
 app.use("/api/import", ImportData);
 app.use("/api/products", productRoute);
 app.use("/api/users", userRoute);
@@ -51,6 +81,7 @@ app.use("/api/orders", orderRoute);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(5000, console.log(`server running in ${PORT}`));
+app.set("port", process.env.PORT || 5000);
+app.listen(app.get("port"), () =>
+  console.log(`Node server listening on port ${app.get("port")}!`)
+);
