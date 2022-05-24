@@ -22,7 +22,7 @@ export const categoryListReducer = (state = { categories: [] }, action) => {
     }
 };
 
-export const createCategory = (state = [], action) => {
+export const createCategoryReducer = (state = [], action) => {
     switch (action.type) {
         case CATEGORY_ADD_NEW_REQUEST:
             return { loading: true};

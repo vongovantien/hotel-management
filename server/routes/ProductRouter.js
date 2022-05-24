@@ -18,17 +18,17 @@ var upload = multer({ storage: storage });
 
 productRoute
     .route("/:id/review")
-    .post(protect, productController.addProductReview)
+    .post(protect, productController.addProductReview);
 
 productRoute
     .route("/:id")
     .get(productController.getProductById)
     .put(protect, productController.updateProduct)
-    .delete(protect, productController.deleteProduct)
+    .delete(productController.deleteProduct);
 
 productRoute
     .route("/")
     .get(productController.getProducts)
-    .post(protect, upload.single("image"), productController.addProduct);
+    .post(upload.single("image"), productController.addProduct);
 
 module.exports = productRoute;

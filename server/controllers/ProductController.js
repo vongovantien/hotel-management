@@ -2,41 +2,26 @@ const Product = require("../models/ProductModel.js");
 const cloudinary = require("cloudinary");
 getProducts = async (req, res) => {
     try {
-        let perPage = 2; // số lượng sản phẩm xuất hiện trên 1 page
-        let page = req.params.page || 1;
+        let perPage = req.query.perPage || 5;
+        let page = req.query.page || 1;
 
-        const product = await Product
-            .find() // find tất cả các data
-            .skip((perPage * page) - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+        await Product.find()
+            .select("-reviews -description -createdAt -updatedAt -__v")
+            .skip(perPage * page - perPage)
             .limit(perPage)
-            .exec((err, products) => {
-                Product.countDocuments((err, count) => { // đếm để tính xem có bao nhiêu trang
+            .exec((err, result) => {
+                Product.countDocuments((err, count) => {
                     if (err) return next(err);
                     res.json({
-                        products, // sản phẩm trên một page
-                        current: page, // page hiện tại
-                        pages: Math.ceil(count / perPage) // tổng số các page
+                        success: true,
+                        result,
+                        current: page,
+                        pages: Math.ceil(count / perPage),
                     });
                 });
             });
-
-        if (req.query.sort) {
-            if (req.query.sort = "NAME_ASC") {
-                product.sort({ name: 'asc' })
-            }
-            if (req.query.sort = "NAME_DESC") {
-                product.sort({ name: 'desc' })
-            }
-            if (req.query.sort = "PRICE_ASC") {
-                product.sort({ price: 'asc' })
-            }
-            if (req.query.sort = "PRICE_ASC") {
-                product.sort({ price: 'desc' })
-            }
-        }
-        // res.status(200).json(products);
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({ success: false, error: error.message });
     }
 };
 
@@ -52,6 +37,15 @@ getProductById = async (req, res) => {
 addProduct = async (req, res) => {
     try {
         const { name, description, price, countInStock } = req.body;
+
+        const existItem = await Product.find({ name });
+        if (existItem) {
+            return res.status(400).json({
+                success: false,
+                message: "Sản phẩm đã tồn tại",
+            });
+        }
+
         const image = await cloudinary.uploader.upload(req.file.path);
 
         const newProduct = await Product.create({
@@ -71,14 +65,12 @@ addProduct = async (req, res) => {
                 countInStock: newProduct.countInStock,
                 image: newProduct.image,
             });
-        } else {
-            res.status(400).json({
-                success: false,
-                message: "Error",
-            });
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({
+            success: false,
+            error: error.message,
+        });
     }
 };
 
@@ -95,13 +87,23 @@ updateProduct = async (req, res) => {
 
 deleteProduct = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
-        await product.remove();
-        res.status(200).json(product);
+        const existItem = await Product.findById(req.params.id);
+        if (!existItem) {
+            res.status(404).json({
+                success: false,
+                message: "Sản phẩm không tồn tại trong hệ thống",
+            });
+        }
+        await existItem.remove();
+        res.status(200).json({ success: true });
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({
+            success: false,
+            error: error.message,
+        });
     }
 };
+
 addProductReview = async (req, res) => {
     try {
         const { rating, comment } = req.body;

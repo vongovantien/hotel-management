@@ -1,8 +1,10 @@
 const express = require("express");
 const asyncHandler = require("express-async-handler");
-const categoryController = require("../controllers/CategoryController");
+const { check, body } = require("express-validator");
+const categoryController = require("../controllers/CategoryController.js");
 const categoryRoute = express.Router();
 
+const { categoryValidation } = require("../middleware/validation.js");
 categoryRoute
     .route("/:id")
     .get(categoryController.getCategoryById)
@@ -12,7 +14,7 @@ categoryRoute
 categoryRoute
     .route("/")
     .get(categoryController.getCategories)
-    .post(categoryController.addCategory);
+    .post(categoryValidation, categoryController.addCategory);
 
 // categoryRoute.get(
 //     "/:id",

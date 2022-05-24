@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserDetails, login } from "../redux/actions/UserAction";
+import { getUserDetails } from "../redux/actions/UserAction";
 
 const ProfileScreen = () => {
     const dispatch = useDispatch();
@@ -8,14 +8,12 @@ const ProfileScreen = () => {
     const { userInfo } = userLogin;
 
     useEffect(() => {
-        dispatch(getUserDetails("profile"));
-    }, [dispatch]);
+        if (userInfo) {
+            dispatch(getUserDetails(userInfo._id));
+        }
+    }, []);
 
-    const submitHandler = (e) => {
-        e.preventDefault();
-        dispatch(login(email, password));
-    };
-    return <div>ProfileScreen</div>;
+    return <div>{userInfo}</div>;
 };
 
 export default ProfileScreen;

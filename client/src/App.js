@@ -11,8 +11,7 @@ import PlaceOrderScreens from "./screens/PlaceOrderScreens";
 import OrderScreen from "./screens/OrderScreen";
 import NotFound from "./screens/NotFound";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Moment from 'react-moment';
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import ProductScreen from "./screens/ProductScreen";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
@@ -20,12 +19,23 @@ import Dashboard from "./screens/Dashboard";
 import State from "./components/State";
 import Product from "./screens/Dashboard/Product";
 import Category from "./screens/Dashboard/Category";
+import ProfileScreen from "./screens/ProfileScreen";
+
+import FacebookLogin from "react-facebook-login";
 
 const App = () => {
     const location = useLocation();
+    const responseFacebook = (response) => {
+        console.log(response.accessToken);
+        console.log(response.userID);
+    };
+
     return (
         <>
-            {location.pathname.startsWith('/admin') || location.pathname.startsWith('/dashboard') ? null : <Header />}
+            {location.pathname.startsWith("/admin") ||
+            location.pathname.startsWith("/dashboard") ? null : (
+                <Header />
+            )}
             <Routes>
                 <Route path="/" element={<HomeScreen />} />
                 <Route
@@ -47,16 +57,21 @@ const App = () => {
 
                 <Route path="/register" element={<Register />} />
                 <Route path="/cart/:id?" element={<CartScreen />} />
-                <Route path="/products" element={<ProductScreen />} />
+                <Route path="/products" element={<ProfileScreen />} />
                 <Route path="/shipping" element={<HomeScreen />} />
                 <Route path="/payment" element={<PaymentScreen />} />
-                <Route path="/placeorder" element={<PlaceOrderScreens />} />
+                <Route path="/place-order" element={<PlaceOrderScreens />} />
                 <Route path="/order" element={<OrderScreen />} />
+                <Route path="/profile" element={<ProfileScreen />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
             {/* {location.pathname === '/login' || location.pathname === '/register' ? null : <Footer />} */}
+            <FacebookLogin
+                appId="1490511664738511"
+                autoLoad={true}
+                callback={responseFacebook}
+            />
         </>
-
     );
 };
 
