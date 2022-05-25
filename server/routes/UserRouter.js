@@ -13,33 +13,21 @@ const userController = require("../controllers/UserController");
  *  schemas:
  *    User:
  *      type: object
- *      required:
- *        - firstName
- *        - lastName
- *        - age
- *        - classId
  *      properties:
- *        id:
+ *        _id:
  *          type: string
- *          description: The auto-generated id of the user
- *        firstName:
+ *        name:
  *          type: string
- *          description: The user first name
- *        lastName:
+ *        email:
  *          type: string
- *          description: The user last name
- *        age:
+ *        password:
  *          type: number
- *          description: The user age
- *        classId:
+ *        createdAt:
  *          type: string
- *          description: Class id of user
- *      example:
- *        id: 22ace041-6386-483c-82b6-9aba0fbbc61e
- *        firstName: John
- *        lastName: Doe
- *        age: 17
- *        classId: 5f744a89-54aa-4a89-a845-b84208cbb651
+ *          format: date-time
+ *        updatedAt:
+ *          type: string
+ *          format: date-time
  */
 
 /**
@@ -85,9 +73,12 @@ userRoute.get("/getAllUsers", userController.getAllUsers);
 userRoute.get("/profile/:id", userController.profile);
 /**
  * @swagger
- * /api/register:
+ * /api/users/register:
  *  post:
  *    tags: [Authenticate]
+ *    responses:
+ *      200:
+ *        description: Success
  *    requestBody:
  *      required: true
  *      content:
@@ -95,46 +86,73 @@ userRoute.get("/profile/:id", userController.profile);
  *          schema:
  *            type: object
  *            required:
- *              - firstName
- *              - lastName
- *              - age
- *              - classId
+ *              - name
+ *              - email
+ *              - isAdmin
+ *              - createdAt
+ *              - updatedAt
  *            properties:
- *              id:
+ *              name:
  *                type: string
- *                description: The auto-generated id of the student
- *              firstName:
+ *              email:
  *                type: string
- *                description: The student first name
- *              lastName:
+ *                format: email
+ *              password:
  *                type: string
- *                description: The student last name
- *              age:
- *                type: number
- *                description: The student age
- *              classId:
+ *              isAdmin:
+ *                type: boolean
+ *              createdAt:
  *                type: string
- *                description: Class id of student
- *            example:
- *              firstName: John
- *              lastName: Doe
- *              age: 17
- *              classId: 5f744a89-54aa-4a89-a845-b84208cbb651
- *    responses:
- *      200:
- *        description: The student was created success
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#components/schemas/Student'
- *      500:
- *        description: Some server error
+ *                format: date-time
+ *              updatedAt:
+ *                type: string
+ *                format: date-time
  */
 userRoute.post("/register", asyncHandler(userController.register));
-
+/**
+ * @swagger
+ * /api/users/login:
+ *  post:
+ *    tags: [Authenticate]
+ *    responses:
+ *      200:
+ *        description: Success
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              email:
+ *                type: string
+ *                format: email
+ *              password:
+ *                type: string
+ */
 userRoute.post("/login", userController.login);
 
-userRoute.post("/login", userController.forgotPassword);
+/**
+ * @swagger
+ * /api/users/forgotPassword:
+ *  post:
+ *    tags: [Authenticate]
+ *    responses:
+ *      200:
+ *        description: Success
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              email:
+ *                type: string
+ *                format: email
+ */
+userRoute.post("/forgotPassword", userController.forgotPassword);
+
 /**
  * @swagger
  * /api/users/updateUser/{id}:
@@ -144,8 +162,11 @@ userRoute.post("/login", userController.forgotPassword);
  *      - in: path
  *        name: id
  *        schema:
- *          type: uuid
+ *          type: string
  *        required: true
+ *    responses:
+ *      200:
+ *        description: Success
  *    requestBody:
  *      required: true
  *      content:

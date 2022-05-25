@@ -1,6 +1,7 @@
 const Product = require("../models/ProductModel.js");
 const cloudinary = require("cloudinary");
-getProducts = async (req, res) => {
+
+getAllProducts = async (req, res) => {
     try {
         let perPage = req.query.perPage || 5;
         let page = req.query.page || 1;
@@ -12,7 +13,7 @@ getProducts = async (req, res) => {
             .exec((err, result) => {
                 Product.countDocuments((err, count) => {
                     if (err) return next(err);
-                    res.json({
+                    res.status(200).json({
                         success: true,
                         result,
                         current: page,
@@ -141,7 +142,7 @@ addProductReview = async (req, res) => {
 };
 
 module.exports = {
-    getProducts,
+    getAllProducts,
     getProductById,
     addProduct,
     updateProduct,
