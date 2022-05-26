@@ -2,8 +2,32 @@ const User = require("../models/UserModel.js");
 const generateToken = require("../utils/generateToken");
 // const fetch = require("node-fetch");
 const { OAuth2Client } = require("google-auth-library");
-
+const nodemailer = require("nodemailer");
 const mongoose = require("mongoose");
+
+
+const transport = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+        user: "vongovantien@gmail.com",
+        pass: "vongovantien30820",
+    },
+});
+
+
+sendConfirmationEmail = (name, email, confirmationCode) => {
+    console.log("Check");
+    transport.sendMail({
+        from: "vongovantien@gmail.com",
+        to: email,
+        subject: "Please confirm your account",
+        html: `<h1>Email Confirmation</h1>
+          <h2>Hello ${name}</h2>
+          <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
+          <a href=http://localhost:5000/api/users/confirm/${confirmationCode}> Click here</a>
+          </div>`,
+    }).catch(err => console.log(err));
+};
 
 login = async (req, res) => {
     const { email, password } = req.body;
@@ -45,6 +69,7 @@ getAllUsers = async (req, res) => {
                     });
                 });
             });
+
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
@@ -63,36 +88,60 @@ register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
         const userExist = await User.findOne({ email });
-        if (!userExist) {
+        if (userExist) {
             res.status(400).json({
                 success: false,
                 message: "User already exist",
             });
         }
+
+        console.log(userExist)
         const user = await User.create({
             name,
             email,
             password,
+            confirmationCode: generateToken(email)
         });
-        if (user) {
-            res.status(201).json({
-                _id: user._id,
-                name: user.name,
-                email: user.email,
-                isAdmin: user.isAdmin,
-                token: generateToken(user._id),
-                createdAt: user.createdAt,
-            });
-        } else {
-            res.status(400).json({
-                success: false,
-                message: "Error",
-            });
-        }
-        // await user.save().then(res.status(201).json(user));
+
+        sendConfirmationEmail(
+            user.name,
+            user.email,
+            user.confirmationCode
+        )
+        return res.status(201).json({
+            message:
+                "User was registered successfully! Please check your email",
+        });
     } catch (error) {
         res.status(500).send(error.message);
     }
+};
+
+verifyUser = async (req, res, next) => {
+    const existItem = await User.findOne({
+        confirmationCode: req.params.confirmationCode,
+    })
+    console.log(req.params.confirmationCode)
+    console.log(existItem)
+
+    if (!existItem) {
+        return res.status(404).send({ message: "User Not found." });
+    }
+
+    existItem.active = true;
+    existItem.confirmationCode = null
+    const user = await existItem.save();
+
+    res.status(200).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        active: user.active,
+        token: generateToken(user._id),
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+    })
 };
 
 updateUser = async (req, res) => {
@@ -147,7 +196,10 @@ deleteUser = async (req, res) => {
 };
 
 forgotPassword = async (req, res) => { };
+resetPassword = async (req, res) => {
+    const token = req.params.token;
 
+}
 googleLogin = async (req, res) => { };
 facebookLogin = async (req, res) => {
     const { userID, accessToken } = req.body;
@@ -210,4 +262,5 @@ module.exports = {
     getAllUsers,
     googleLogin,
     facebookLogin,
+    verifyUser
 };

@@ -7,10 +7,10 @@ const bodyParser = require("body-parser");
 const connectDatabase = require("./config/MongoDb.js");
 const ImportData = require("./DataImport.js");
 const { errorHandler, notFound } = require("./middleware/Errors.js");
-const productRoute = require("./routes/ProductRouter.js");
-const userRoute = require("./routes/UserRouter");
-const categoryRoute = require("./routes/CategoryRouter");
-const orderRoute = require("./routes/OrderRouter");
+const productRouter = require("./routes/ProductRouter.js");
+const userRouter = require("./routes/UserRouter");
+const categoryRouter = require("./routes/CategoryRouter");
+const orderRouter = require("./routes/OrderRouter");
 const cors = require("cors");
 const swaggerUI = require("swagger-ui-express");
 const swaggerJSDoc = require("swagger-jsdoc");
@@ -64,10 +64,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/swagger/", swaggerUI.serve, swaggerUI.setup(specs));
 app.use("/api/import", ImportData);
-app.use("/api/products", productRoute);
-app.use("/api/users", userRoute);
-app.use("/api/categories", categoryRoute);
-app.use("/api/orders", orderRoute);
+app.use("/api/products", productRouter);
+app.use("/api/users", userRouter);
+app.use("/api/categories", categoryRouter);
+app.use("/api/orders", orderRouter);
 
 // function apiResponse(results){
 //     return JSON.stringify({"status": 200, "error": null, "response": results});

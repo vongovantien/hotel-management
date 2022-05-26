@@ -20,6 +20,15 @@ const userSchema = mongoose.Schema(
             require: true,
             default: false,
         },
+        active: {
+            type: Boolean,
+            require: true,
+            default: false
+        },
+        confirmationCode: {
+            type: String,
+            unique: true
+        },
     },
     {
         timestamps: true,

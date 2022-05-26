@@ -3,7 +3,7 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/UserModel.js");
 const generateToken = require("../utils/generateToken");
 const protect = require("../middleware/AuthMiddleware.js");
-const userRoute = express.Router();
+const userRouter = express.Router();
 const nodemailer = require("nodemailer");
 const userController = require("../controllers/UserController");
 
@@ -53,7 +53,7 @@ const userController = require("../controllers/UserController");
  *        description: Success
  */
 
-userRoute.get("/getAllUsers", userController.getAllUsers);
+userRouter.get("/getAllUsers", userController.getAllUsers);
 
 /**
  * @swagger
@@ -70,7 +70,7 @@ userRoute.get("/getAllUsers", userController.getAllUsers);
  *      200:
  *        description: Success
  */
-userRoute.get("/profile/:id", userController.profile);
+userRouter.get("/profile/:id", userController.profile);
 /**
  * @swagger
  * /api/users/register:
@@ -108,7 +108,7 @@ userRoute.get("/profile/:id", userController.profile);
  *                type: string
  *                format: date-time
  */
-userRoute.post("/register", asyncHandler(userController.register));
+userRouter.post("/register", asyncHandler(userController.register));
 /**
  * @swagger
  * /api/users/login:
@@ -130,7 +130,7 @@ userRoute.post("/register", asyncHandler(userController.register));
  *              password:
  *                type: string
  */
-userRoute.post("/login", userController.login);
+userRouter.post("/login", userController.login);
 
 /**
  * @swagger
@@ -151,7 +151,7 @@ userRoute.post("/login", userController.login);
  *                type: string
  *                format: email
  */
-userRoute.post("/forgotPassword", userController.forgotPassword);
+userRouter.post("/forgotPassword", userController.forgotPassword);
 
 /**
  * @swagger
@@ -196,7 +196,7 @@ userRoute.post("/forgotPassword", userController.forgotPassword);
  *                type: string
  *                format: date-time
  */
-userRoute.put("/updateUser/:id", userController.updateUser);
+userRouter.put("/updateUser/:id", userController.updateUser);
 /**
  * @swagger
  * /api/users/{id}:
@@ -212,7 +212,8 @@ userRoute.put("/updateUser/:id", userController.updateUser);
  *      200:
  *        description: Success
  */
-userRoute.delete("/:id", userController.deleteUser);
-userRoute.post("/googleLogin", userController.googleLogin);
+userRouter.delete("/:id", userController.deleteUser);
+userRouter.post("/googleLogin", userController.googleLogin);
 
-module.exports = userRoute;
+userRouter.get("/confirm/:confirmationCode", userController.verifyUser)
+module.exports = userRouter;
