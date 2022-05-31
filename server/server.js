@@ -15,6 +15,10 @@ const cors = require("cors");
 const swaggerUI = require("swagger-ui-express");
 const swaggerJSDoc = require("swagger-jsdoc");
 
+let myUrl;
+if (process.env.NODE_ENV === "development") myUrl = "http://localhost:5000";
+else myUrl = "https://saleapp-backend.herokuapp.com/";
+
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -25,7 +29,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:5000",
+        url: myUrl,
       },
     ],
     host: "https://saleapp-backend.herokuapp.com/",
@@ -56,7 +60,7 @@ const app = express();
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.redirect("/swagger");
 });
 
 app.use(express.json());

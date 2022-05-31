@@ -4,7 +4,7 @@ const Product = require("../models/ProductModel.js");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
-const productController = require("../controllers/productController.js");
+const productController = require("../controllers/ProductController.js");
 const productRouter = express.Router();
 const protect = require("../middleware/AuthMiddleware.js");
 
