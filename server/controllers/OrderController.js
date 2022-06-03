@@ -1,6 +1,8 @@
 const Order = require("../models/OrderModel");
 
 getOrders = async (req, res) => {
+    /*  #swagger.tags = ['Category']
+            #swagger.description = 'Endpoint to get the specific user.' */
     try {
         const orders = await Order.find();
         res.status(200).json(orders);
@@ -10,6 +12,8 @@ getOrders = async (req, res) => {
 };
 
 getOrderById = async (req, res) => {
+    /*  #swagger.tags = ['Order']
+            #swagger.description = 'Endpoint to get the specific user.' */
     try {
         const order = await Order.findById(req.params.id).populate(
             "user",

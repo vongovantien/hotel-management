@@ -3,7 +3,6 @@ import { Button, Card, Container, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { login } from "../redux/actions/UserAction";
-import { GoogleLogin } from "react-google-login";
 
 const clientID =
     "468452925173-9jitj8iaej5v8rhr4l81v87tmbov403i.apps.googleusercontent.com";
@@ -49,7 +48,7 @@ const Login = () => {
 
     return (
         <>
-            <GoogleLogin
+            {/* <GoogleLogin
                 clientId={clientID}
                 buttonText="Login with google"
                 isSignedIn={true}
@@ -57,7 +56,7 @@ const Login = () => {
                 onFailure={onFailure}
                 style={{ marginTop: "100px" }}
                 cookiePolicy={'single_host_origin'}
-            />
+            /> */}
             {error && <h1 className="text-danger">{error}</h1>}
             {loading && <span>Loading...</span>}
             <Container fluid="md" className="mt-5">

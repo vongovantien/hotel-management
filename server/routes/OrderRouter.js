@@ -5,7 +5,9 @@ const orderRoute = express.Router();
 
 orderRoute
     .route("/:id")
-    .get(orderController.getOrderById)
+    .get(
+        // #swagger.tags = ['Order']
+        orderController.getOrderById)
     .delete(orderController.deleteOrder);
 
 

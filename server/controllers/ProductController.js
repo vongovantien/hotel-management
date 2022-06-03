@@ -2,6 +2,8 @@ const Product = require("../models/ProductModel.js");
 const cloudinary = require("cloudinary");
 
 getAllProducts = async (req, res) => {
+    /*  #swagger.tags = ['Product']
+            #swagger.description = 'Endpoint to get the specific user.' */
     try {
         let perPage = req.query.perPage || 5;
         let page = req.query.page || 1;
@@ -36,6 +38,17 @@ getProductById = async (req, res) => {
 };
 
 addProduct = async (req, res) => {
+    /*
+        #swagger.consumes = ['multipart/form-data']  
+        #swagger.parameters['multFiles'] = {
+            in: 'formData',
+            type: 'array',
+            required: true,
+            description: 'Some description...',
+            collectionFormat: 'multi',
+            items: { type: 'file' }
+        } 
+    */
     try {
         const { name, description, price, countInStock } = req.body;
 

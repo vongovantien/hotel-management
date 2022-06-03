@@ -14,7 +14,7 @@ const orderRouter = require("./routes/OrderRouter");
 const cors = require("cors");
 const swaggerUI = require("swagger-ui-express");
 const swaggerJSDoc = require("swagger-jsdoc");
-
+const swaggerFile = require('./swagger-output.json')
 let myUrl;
 if (process.env.NODE_ENV === "development") myUrl = "http://localhost:5000";
 else myUrl = "https://saleapp-backend.herokuapp.com/";
@@ -66,21 +66,22 @@ app.get("/", (req, res) => {
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/swagger/", swaggerUI.serve, swaggerUI.setup(specs));
-app.use("/api/import", ImportData);
-app.use("/api/products", productRouter);
-app.use("/api/users", userRouter);
-app.use("/api/categories", categoryRouter);
-app.use("/api/orders", orderRouter);
+app.use("/swagger/", swaggerUI.serve, swaggerUI.setup(swaggerFile));
 
-// function apiResponse(results){
-//     return JSON.stringify({"status": 200, "error": null, "response": results});
-// }
 
-// app.post("/api/image-upload", upload.single("image"), (req, res) => {
-//     const image = req.image;
-//     res.send(apiResponse({ message: "File uploaded successfully.", image }));
-// });
+app.use("/api/products",
+  //#swagger.tags = ['Product']
+  productRouter);
+app.use("/api/users",
+  //#swagger.tags = ['User'] 
+  userRouter);
+app.use("/api/categories",
+  //#swagger.tags = ['Category']
+  categoryRouter);
+app.use("/api/orders",
+  //#swagger.tags = ['Order']
+  orderRouter);
+
 
 app.use(notFound);
 app.use(errorHandler);

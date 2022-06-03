@@ -1,4 +1,4 @@
-import React, { Profiler } from "react";
+import React, { Profiler, useState } from "react";
 import HomeScreen from "./screens/HomeScreen";
 
 import { Routes, Route, useLocation, Outlet } from "react-router-dom";
@@ -20,23 +20,70 @@ import State from "./components/State";
 import Product from "./screens/Dashboard/Product";
 import Category from "./screens/Dashboard/Category";
 import ProfileScreen from "./screens/ProfileScreen";
-
-import FacebookLogin from "react-facebook-login";
+import { auth, google, facebook, git } from "./config/firebase"
+import { signInWithPopup, signOut } from "firebase/auth";
 
 const App = () => {
+
+    const [isLogin, setIsLogin] = useState(false)
     const location = useLocation();
-    const responseFacebook = (response) => {
-        console.log(response.accessToken);
-        console.log(response.userID);
-    };
+
+    const [user, setUser] = useState(null)
+
+    const LoginFalse = () => (
+        <>
+            <h1>Login please...</h1>
+            <button style={{ width: 150, backgroundColor: '#de5246', color: 'white' }}
+                onClick={() => login(google)}>
+                Login with Google
+            </button>
+            <button style={{ width: 150, backgroundColor: '#3b5998', color: 'white' }}
+                onClick={() => login(facebook)}>
+                Login with Facebook
+            </button>
+            <button style={{ width: 150, backgroundColor: 'black', color: 'white' }}
+                onClick={() => { login(git) }}>
+                Login with GitHub
+            </button>
+        </>
+    )
+
+    const LoginTrue = () => (
+        <>
+            <h1>Welcome!</h1>
+            <img src={user.photoURL} style={{ width: 120 }} />
+            <p>Welcome {user.displayName}! Your account {user.email} has been successfully logged in at {user.metadata.lastSignInTime}</p>
+            <button style={{ width: 150 }} onClick={logout}>
+                Logout
+            </button>
+        </>
+    )
+
+
+    const login = async (provider) => {
+        const result = await signInWithPopup(auth, provider)
+        setUser(result.user)
+        setIsLogin(true)
+        console.log(result)
+    }
+
+    const logout = async () => {
+        const result = await signOut(auth)
+        setUser(null)
+        setIsLogin(false)
+        console.log(result)
+    }
+
+
 
     return (
         <>
-            {location.pathname.startsWith("/admin") ||
-            location.pathname.startsWith("/dashboard") ? null : (
+            {isLogin ? <LoginTrue /> : <LoginFalse />}
+            {/* {location.pathname.startsWith("/admin") ||
+                location.pathname.startsWith("/dashboard") ? null : (
                 <Header />
-            )}
-            <Routes>
+            )} */}
+            {/* <Routes>
                 <Route path="/" element={<HomeScreen />} />
                 <Route
                     exact
@@ -64,15 +111,12 @@ const App = () => {
                 <Route path="/order" element={<OrderScreen />} />
                 <Route path="/profile" element={<ProfileScreen />} />
                 <Route path="*" element={<NotFound />} />
-            </Routes>
+            </Routes> */}
             {/* {location.pathname === '/login' || location.pathname === '/register' ? null : <Footer />} */}
-            <FacebookLogin
-                appId="1490511664738511"
-                autoLoad={true}
-                callback={responseFacebook}
-            />
+
         </>
     );
 };
+
 
 export default App;

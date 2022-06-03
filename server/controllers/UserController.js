@@ -50,6 +50,8 @@ login = async (req, res) => {
 };
 
 getAllUsers = async (req, res) => {
+    /*  #swagger.tags = ['User']
+            #swagger.description = 'Endpoint to get the specific user.' */
     try {
         let perPage = req.query.perPage || 5;
         let page = req.query.page || 1;

@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const Category = require("../models/CategoryModel.js");
-exports.getCategories = async (req, res) => {
+exports.getAllCategories = async (req, res) => {
     try {
         let perPage = req.query.perPage || 5;
         let page = req.query.page || 1;
@@ -27,7 +27,11 @@ exports.getCategories = async (req, res) => {
     }
 };
 
+ /*  #swagger.tags = ['User']
+            #swagger.description = 'Endpoint to get the specific user.' */
 exports.getCategoryById = async (req, res) => {
+     /*  #swagger.tags = ['Category']
+            #swagger.description = 'Endpoint to get the specific user.' */
     try {
         const category = await Category.findById(req.params.id);
         res.status(200).json(category);
