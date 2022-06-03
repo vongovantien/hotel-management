@@ -1,0 +1,22 @@
+.text-brand {
+    font-weight: 700;
+    font-size: 20px;
+    color: black;
+}
+.text-title {
+    font-weight: 500;
+}
+.header-items {
+    font-weight: 500;
+}
+.header-items > .nav-item {
+    padding-right: 50px;
+}
+.header-items > .nav-item:hover {
+    cursor: pointer;
+}
+.header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
