@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import React from 'react'
-
-const ProfileScreen = () => {
-  return (
-    <div>ProfileScreen</div>
-  )
-}
-
-export default ProfileScreen
-=======
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDetails } from "../redux/actions/UserAction";
@@ -28,4 +17,3 @@ const ProfileScreen = () => {
 };
 
 export default ProfileScreen;
->>>>>>> main

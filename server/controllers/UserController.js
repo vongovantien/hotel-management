@@ -15,14 +15,14 @@ const transport = nodemailer.createTransport({
 });
 
 
-sendConfirmationEmail = (name, email, confirmationCode) => {
+sendConfirmationEmail = (email, confirmationCode) => {
     console.log("Check");
     transport.sendMail({
         from: "vongovantien@gmail.com",
         to: email,
         subject: "Please confirm your account",
         html: `<h1>Email Confirmation</h1>
-          <h2>Hello ${name}</h2>
+          <h2>Hello ${email}</h2>
           <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
           <a href=http://localhost:5000/api/users/confirm/${confirmationCode}> Click here</a>
           </div>`,
@@ -63,7 +63,7 @@ getAllUsers = async (req, res) => {
             .exec((err, result) => {
                 User.countDocuments((err, count) => {
                     if (err) return next(err);
-                    res.status(200).json({
+                    return res.status(200).json({
                         success: true,
                         result,
                         current: page,
@@ -73,7 +73,7 @@ getAllUsers = async (req, res) => {
             });
 
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        return res.status(500).json({ success: false, error: error.message });
     }
 };
 
@@ -88,7 +88,7 @@ profile = async (req, res) => {
 
 register = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { first_name,last_name, email, password } = req.body;
         const userExist = await User.findOne({ email });
         if (userExist) {
             res.status(400).json({
@@ -97,16 +97,15 @@ register = async (req, res) => {
             });
         }
 
-        console.log(userExist)
         const user = await User.create({
-            name,
+            first_name,
+            last_name,
             email,
             password,
             confirmationCode: generateToken(email)
         });
 
         sendConfirmationEmail(
-            user.name,
             user.email,
             user.confirmationCode
         )

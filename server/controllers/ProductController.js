@@ -2,8 +2,7 @@ const Product = require("../models/ProductModel.js");
 const cloudinary = require("cloudinary");
 
 getAllProducts = async (req, res) => {
-    /*  #swagger.tags = ['Product']
-            #swagger.description = 'Endpoint to get the specific user.' */
+    /*  #swagger.tags = ['Product']*/
     try {
         let perPage = req.query.perPage || 5;
         let page = req.query.page || 1;
@@ -121,7 +120,6 @@ deleteProduct = async (req, res) => {
 addProductReview = async (req, res) => {
     try {
         const { rating, comment } = req.body;
-        console.log(typeof rating);
         const product = await Product.findById(req.params.id);
         if (product) {
             const alreadyProduct = product.reviews.find(
@@ -132,10 +130,10 @@ addProductReview = async (req, res) => {
                 throw new Error("Product already reviewed");
             }
             const newReview = {
-                name: req.user.name,
+                // name: req.user.name,
                 rating: Number(rating),
                 comment,
-                user: req.user._id,
+                // user: req.user._id,
             };
             product.reviews.push(newReview);
             product.numReviews = product.reviews.length;

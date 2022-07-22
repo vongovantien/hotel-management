@@ -4,6 +4,7 @@ import { Link, Outlet } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 import Product from "./Dashboard/Product";
 import Category from "./Dashboard/Category";
+import Stats from "../components/Stats";
 
 const Dashboard = () => {
     const [currrentTab, setCurrentTab] = useState("category");
@@ -14,12 +15,14 @@ const Dashboard = () => {
                 return <Category />;
             case "product":
                 return <Product />;
+            case "product-stats":
+                return < Stats />;
             default:
                 return null;
         }
     };
 
-    useEffect(() => {}, [currrentTab]);
+    useEffect(() => { }, [currrentTab]);
 
     return (
         <div className="container">
@@ -43,11 +46,17 @@ const Dashboard = () => {
                         >
                             Quản lí sản phẩm
                         </p>
+                        <p
+                            className={`nav-link ${currrentTab === "product-stats" ? "text-danger" : ""}`}
+                            style={{ cursor: "pointer" }}
+                            onClick={() => setCurrentTab("product-stats")}
+                        >
+                            Thống kê theo sản phẩm
+                        </p>
                     </div>
                 </div>
                 <div className="col-md-8">
                     {fetchTabContent()}
-                    <Outlet />
                 </div>
             </div>
         </div>

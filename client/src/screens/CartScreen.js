@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import React from 'react'
-
-const CartScreen = () => {
-  return (
-    <div>CartScreen</div>
-  )
-}
-
-export default CartScreen
-=======
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,4 +28,3 @@ const CartScreen = () => {
 };
 
 export default CartScreen;
->>>>>>> main

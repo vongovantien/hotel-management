@@ -1,26 +1,3 @@
-<<<<<<< HEAD
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import Header from "../components/Header";
-
-const SingleProduct = ({ match }) => {
-  const [product, setProduct] = useState();
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const { data } = await axios.get(`/api/products/${match.params.id}`);
-      setProduct(data);
-    };
-
-    fetchProduct();
-  }, []);
-
-  return (
-    <>
-      <Header />
-    </>
-  );
-=======
 import React, { useEffect, useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -90,7 +67,6 @@ const SingleProduct = ({ match }) => {
             </div>
         </>
     );
->>>>>>> main
 };
 
 export default SingleProduct;

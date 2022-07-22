@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import React from 'react'
-
-const Login = () => {
-  return (
-    <div>Login</div>
-  )
-}
-
-export default Login
-=======
 import React, { useEffect, useState } from "react";
 import { Button, Card, Container, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,13 +15,7 @@ const Login = () => {
     const dispatch = useDispatch();
     const userLogin = useSelector((state) => state.userLogin);
     const { error, loading, userInfo } = userLogin;
-
-    const onSuccess = (res) => {
-        console.log("Login Success " + res.profileObj);
-    };
-    const onFailure = (res) => {
-        console.log("Login fail" + res);
-    };
+    
     useEffect(() => {
         if (userInfo) {
             navigate("/");
@@ -43,31 +26,9 @@ const Login = () => {
         e.preventDefault();
         dispatch(login(email, password));
     };
-    // const handleLogin = async (googleData) => {
-    //     const res = await fetch("/api/v1/auth/google", {
-    //         method: "POST",
-    //         body: JSON.stringify({
-    //             token: googleData.tokenId,
-    //         }),
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //     });
-    //     const data = await res.json();
-    //     console.log(data);
-    // };
 
     return (
         <>
-            {/* <GoogleLogin
-                clientId={clientID}
-                buttonText="Login with google"
-                isSignedIn={true}
-                onSuccess={onSuccess}
-                onFailure={onFailure}
-                style={{ marginTop: "100px" }}
-                cookiePolicy={'single_host_origin'}
-            /> */}
             {error && <h1 className="text-danger">{error}</h1>}
             {loading && <span>Loading...</span>}
             <Container fluid="md" className="mt-5">
@@ -103,4 +64,3 @@ const Login = () => {
 };
 
 export default Login;
->>>>>>> main

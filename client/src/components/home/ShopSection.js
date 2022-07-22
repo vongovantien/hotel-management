@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-const ShopSection = () => {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const { data } = axios.get;
-    };
-  }, []);
-
-  return <div>ShopSection</div>;
-=======
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { listProduct } from "../../redux/actions/ProductActions";
@@ -51,7 +37,6 @@ const ShopSection = () => {
             </div>
         </>
     );
->>>>>>> main
 };
 
 export default ShopSection;

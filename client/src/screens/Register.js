@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import React from 'react'
-
-const Register = () => {
-  return (
-    <div>Register</div>
-  )
-}
-
-export default Register
-=======
 import React, { useEffect, useState } from "react";
 import { Button, Card, Container, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -115,4 +104,3 @@ const Register = ({ location, history }) => {
 };
 
 export default Register;
->>>>>>> main

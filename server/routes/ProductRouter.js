@@ -23,7 +23,7 @@ productRouter.post("/:id/reviews", protect, productController.addProductReview);
 productRouter.get("/:id", productController.getProductById)
 productRouter.put("/:id", productController.updateProduct)
 productRouter.delete("/:id", productController.deleteProduct);
-productRouter.post(upload.single("image"), productController.addProduct);
+productRouter.post("/upload", upload.single("image"), productController.addProduct);
 
 
 module.exports = productRouter;

@@ -16,7 +16,7 @@ import ProductScreen from "./screens/ProductScreen";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import Dashboard from "./screens/Dashboard";
-import State from "./components/State";
+import Stats from "./components/Stats";
 import Product from "./screens/Dashboard/Product";
 import Category from "./screens/Dashboard/Category";
 import ProfileScreen from "./screens/ProfileScreen";
@@ -78,30 +78,20 @@ const App = () => {
 
     return (
         <>
-            {isLogin ? <LoginTrue /> : <LoginFalse />}
-            {/* {location.pathname.startsWith("/admin") ||
+            {/* {isLogin ? <LoginTrue /> : <LoginFalse />} */}
+            {location.pathname.startsWith("/admin") ||
                 location.pathname.startsWith("/dashboard") ? null : (
                 <Header />
-            )} */}
-            {/* <Routes>
+            )}
+            <Routes>
                 <Route path="/" element={<HomeScreen />} />
                 <Route
                     exact
                     path="/products/:productId"
                     element={<SingleProduct />}
                 />
-                <Route path="/login" element={<Login />} />
-                <Route path="admin" element={<Dashboard />}>
-                    <Route path="cate-stats" element={<State />} />
-                    <Route path="product-stats" element={<h1>abc</h1>} />
-                    <Route path="order-stats" element={<h1>abc</h1>} />
-                </Route>
-
-                <Route path="dashboard" element={<Dashboard />}>
-                    <Route path="categories" element={<Category />} />
-                    <Route path="products" element={<Product />} />
-                </Route>
-
+                <Route path="/login" exact element={<Login />} />
+                <Route path="admin" element={<Dashboard />}/>
                 <Route path="/register" element={<Register />} />
                 <Route path="/cart/:id?" element={<CartScreen />} />
                 <Route path="/products" element={<ProfileScreen />} />
@@ -111,8 +101,8 @@ const App = () => {
                 <Route path="/order" element={<OrderScreen />} />
                 <Route path="/profile" element={<ProfileScreen />} />
                 <Route path="*" element={<NotFound />} />
-            </Routes> */}
-            {/* {location.pathname === '/login' || location.pathname === '/register' ? null : <Footer />} */}
+            </Routes>
+            {location.pathname === '/login' || location.pathname === '/register' ? null : <Footer />}
 
         </>
     );

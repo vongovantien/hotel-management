@@ -6,11 +6,12 @@ const protect = require("../middleware/AuthMiddleware.js");
 const userRouter = express.Router();
 const nodemailer = require("nodemailer");
 const userController = require("../controllers/UserController");
+const { signupValidation, loginValidation } = require("../middleware/validation")
 
-userRouter.get("/getAllUsers", userController.getAllUsers);
-userRouter.get("/profile/:id", userController.profile);
-userRouter.post("/register", userController.register);
-userRouter.post("/login", userController.login);
+userRouter.get("/", protect, userController.getAllUsers);
+userRouter.get("/profile/:id", protect, userController.profile);
+userRouter.post("/register", signupValidation, userController.register);
+userRouter.post("/login", loginValidation, userController.login);
 userRouter.post("/forgotPassword", userController.forgotPassword);
 userRouter.put("/updateUser/:id", userController.updateUser);
 userRouter.delete("/:id", userController.deleteUser);
