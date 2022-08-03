@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card } from "react-bootstrap";
+import { Button, Card, Col, Container, Row, Image } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import CartItem from "../components/CartItem/CartItem";
@@ -14,9 +14,13 @@ const SingleProduct = ({ match }) => {
     console.log(productId);
     const productDetail = useSelector((state) => state.productDetail);
     const { loading, error, product } = productDetail;
+
     useEffect(() => {
         dispatch(singleProduct(productId));
     }, [dispatch, productId]);
+
+    console.log(product)
+
     return (
         <>
             <div>
@@ -27,40 +31,25 @@ const SingleProduct = ({ match }) => {
                 ) : (
                     product && (
                         <>
-                            <Card style={{ width: "18rem" }}>
-                                <Card.Img
-                                    variant="top"
-                                    src="{prop.image}"
-                                    alt="Product Image"
-                                />
-                                <Card.Body>
-                                    <Card.Title>
-                                        Product name: {product.name}
-                                    </Card.Title>
-
-                                    <Card.Text>
-                                        Price: {product.price}
-                                    </Card.Text>
-                                    <Card.Text>
-                                        Status:{" "}
-                                        {product.countInStock > 0
-                                            ? "Còn hàng"
-                                            : " Hết hàng"}
-                                    </Card.Text>
-                                    <Card.Text>
-                                        Reviews: {product.numReviews}
-                                    </Card.Text>
-                                    <Card.Text>
-                                        Description: {product.description}
-                                    </Card.Text>
-
-                                    {product.countInStock > 0 ? (
-                                        <Button variant="primary">
-                                            Add to Cart
-                                        </Button>
-                                    ) : null}
-                                </Card.Body>
-                            </Card>
+                            <Container>
+                                <Row>
+                                    <Col>
+                                        <Image style={{ width: '80%', textAlign: "center" }} src={product.image}
+                                            alt="Product Image" />
+                                    </Col>
+                                    <Col>
+                                        <p>Tên sản phẩm: {product.name}</p>
+                                        <p>Giá tiền: {product.price}</p>
+                                        <p>Trạng thái: {product.countInStock > 0 ? "Còn hàng" : " Hết hàng"}</p>
+                                        <p>Reviews: {product.numReviews}</p>
+                                        {product.countInStock > 0 ? (
+                                            <Button variant="primary">
+                                                Add to Cart
+                                            </Button>
+                                        ) : null}
+                                    </Col>
+                                </Row>
+                            </Container>
                         </>
                     )
                 )}

@@ -27,6 +27,59 @@ getAllProducts = async (req, res) => {
     }
 };
 
+getAllProductsByCategory = async (req, res) => {
+    /*  #swagger.tags = ['Product']*/
+    try {
+        const categoryId = req.params.categoryId
+        let perPage = req.query.perPage || 5;
+        let page = req.query.page || 1;
+
+        await Product.find({ category_id: `${categoryId}` })
+            .select("-reviews -description -createdAt -updatedAt -__v")
+            .skip(perPage * page - perPage)
+            .limit(perPage)
+            .exec((err, result) => {
+                Product.countDocuments((err, count) => {
+                    if (err) return next(err);
+                    res.status(200).json({
+                        success: true,
+                        result,
+                        current: page,
+                        pages: Math.ceil(count / perPage),
+                    });
+                });
+            });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+getAllProductsBySupplier = async (req, res) => {
+    /*  #swagger.tags = ['Product']*/
+    try {
+        let perPage = req.query.perPage || 5;
+        let page = req.query.page || 1;
+
+        await Product.find()
+            .select("-reviews -description -createdAt -updatedAt -__v")
+            .skip(perPage * page - perPage)
+            .limit(perPage)
+            .exec((err, result) => {
+                Product.countDocuments((err, count) => {
+                    if (err) return next(err);
+                    res.status(200).json({
+                        success: true,
+                        result,
+                        current: page,
+                        pages: Math.ceil(count / perPage),
+                    });
+                });
+            });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
 getProductById = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
@@ -37,17 +90,6 @@ getProductById = async (req, res) => {
 };
 
 addProduct = async (req, res) => {
-    /*
-        #swagger.consumes = ['multipart/form-data']  
-        #swagger.parameters['multFiles'] = {
-            in: 'formData',
-            type: 'array',
-            required: true,
-            description: 'Some description...',
-            collectionFormat: 'multi',
-            items: { type: 'file' }
-        } 
-    */
     try {
         const { name, description, price, countInStock } = req.body;
 
@@ -58,9 +100,6 @@ addProduct = async (req, res) => {
                 message: "Sản phẩm đã tồn tại",
             });
         }
-
-        const image = await cloudinary.uploader.upload(req.file.path);
-
         const newProduct = await Product.create({
             name,
             image: image.secure_url,
@@ -71,12 +110,12 @@ addProduct = async (req, res) => {
 
         if (newProduct) {
             res.status(201).json({
+                success: true,
                 _id: newProduct._id,
                 name: newProduct.name,
                 description: newProduct.description,
                 price: newProduct.price,
                 countInStock: newProduct.countInStock,
-                image: newProduct.image,
             });
         }
     } catch (error) {
@@ -86,6 +125,21 @@ addProduct = async (req, res) => {
         });
     }
 };
+
+uploadProductImage = async (req, res) => {
+    try {
+        const image = await cloudinary.uploader.upload(req.file.path);
+        res.status(200).json({
+            success: true, message: "Upload file successfully!"
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message,
+        });
+    }
+
+}
 
 updateProduct = async (req, res) => {
     try {
@@ -153,10 +207,12 @@ addProductReview = async (req, res) => {
 };
 
 module.exports = {
-    getAllProducts,
+    getAllProductsByCategory,
+    getAllProductsBySupplier,
     getProductById,
     addProduct,
     updateProduct,
     deleteProduct,
     addProductReview,
+    uploadProductImage
 };

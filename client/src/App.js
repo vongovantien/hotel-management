@@ -11,7 +11,7 @@ import PlaceOrderScreens from "./screens/PlaceOrderScreens";
 import OrderScreen from "./screens/OrderScreen";
 import NotFound from "./screens/NotFound";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "react-toastify/dist/ReactToastify.css";
+import 'react-toastify/dist/ReactToastify.css';
 import ProductScreen from "./screens/ProductScreen";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
@@ -22,6 +22,7 @@ import Category from "./screens/Dashboard/Category";
 import ProfileScreen from "./screens/ProfileScreen";
 import { auth, google, facebook, git } from "./config/firebase"
 import { signInWithPopup, signOut } from "firebase/auth";
+import { ToastContainer } from "react-bootstrap";
 
 const App = () => {
 
@@ -85,16 +86,17 @@ const App = () => {
             )}
             <Routes>
                 <Route path="/" element={<HomeScreen />} />
+                <Route path="/home" element={<HomeScreen />} />
                 <Route
                     exact
                     path="/products/:productId"
                     element={<SingleProduct />}
                 />
                 <Route path="/login" exact element={<Login />} />
-                <Route path="admin" element={<Dashboard />}/>
+                <Route path="admin" element={<Dashboard />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/cart/:id?" element={<CartScreen />} />
-                <Route path="/products" element={<ProfileScreen />} />
+                <Route path="/products" element={<ProductScreen />} />
                 <Route path="/shipping" element={<HomeScreen />} />
                 <Route path="/payment" element={<PaymentScreen />} />
                 <Route path="/place-order" element={<PlaceOrderScreens />} />
@@ -103,7 +105,7 @@ const App = () => {
                 <Route path="*" element={<NotFound />} />
             </Routes>
             {location.pathname === '/login' || location.pathname === '/register' ? null : <Footer />}
-
+            <ToastContainer />
         </>
     );
 };

@@ -1,6 +1,4 @@
-const express = require("express");
-const asyncHandler = require("express-async-handler");
-const { check, body } = require("express-validator");
+const express = require("express");;
 const categoryController = require("../controllers/CategoryController.js");
 const categoryRoute = express.Router();
 

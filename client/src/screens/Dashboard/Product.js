@@ -38,7 +38,7 @@ const Product = () => {
     };
     const handleDelete = async (id) => {
         await dispatch(deleteProduct(id));
-        await dispatch(listProduct({currentPage, perPage}));
+        await dispatch(listProduct({ currentPage, perPage }));
     };
 
     const handleSubmit = async () => {
@@ -49,19 +49,6 @@ const Product = () => {
         data.append("image", image.current.files[0]);
 
         const res = await dispatch(createProduct(data));
-        console.log(res);
-        // if (res.success === false) {
-        //     for (let i = 0; i < res.errors.length; i++) {
-        //         toast(i.msg);
-        //     }
-        // }
-        // if (res.success === true) {
-        //     setShow(false);
-        //     toast("Thêm mới loại sản phẩm thành công!");
-        //     await dispatch(listProducts());
-        //     setProductName("");
-        //     setProductType("");
-        // }
     };
 
     const fetchListProducts = async () => {

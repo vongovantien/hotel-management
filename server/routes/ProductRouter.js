@@ -18,12 +18,14 @@ const storage = new CloudinaryStorage({
 var upload = multer({ storage: storage });
 
 productRouter.get("/", productController.getAllProducts)
+productRouter.get("/:categoryId", productController.getAllProducts)
 
 productRouter.post("/:id/reviews", protect, productController.addProductReview);
 productRouter.get("/:id", productController.getProductById)
 productRouter.put("/:id", productController.updateProduct)
 productRouter.delete("/:id", productController.deleteProduct);
-productRouter.post("/upload", upload.single("image"), productController.addProduct);
+productRouter.post("/", productController.addProduct);
+productRouter.put("/", upload.single("image"), productController.uploadProductImage);
 
 
 module.exports = productRouter;

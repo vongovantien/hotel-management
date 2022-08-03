@@ -15,6 +15,8 @@ const cors = require("cors");
 const swaggerUI = require("swagger-ui-express");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerFile = require('./swagger-output.json')
+
+
 let myUrl;
 if (process.env.NODE_ENV === "development") myUrl = "http://localhost:5000";
 else myUrl = "https://saleapp-backend.herokuapp.com/";
@@ -56,6 +58,7 @@ const specs = swaggerJSDoc(options);
 
 dotenv.config();
 connectDatabase();
+
 const app = express();
 app.use(cors());
 
@@ -85,7 +88,9 @@ app.use("/api/orders",
 
 app.use(notFound);
 app.use(errorHandler);
-
+app.use((req, res, next) => {
+  next(createError(404));
+});
 app.set("port", process.env.PORT || 5000);
 app.listen(app.get("port"), () =>
   console.log(`Node server listening on port ${app.get("port")}!`)

@@ -6,7 +6,6 @@ const HomeScreen = () => {
     return (
         <div>
             <ShopSection />
-            {/* <CallToActionSection /> */}
             <ContactInfo />
         </div>
     );

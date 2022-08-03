@@ -1,9 +1,10 @@
-// import axios from "axios";
+import axios from "axios";
 
-// export const endpoints = {
-//     'login': '/user/login/',
-// }
+export const endpoints = {
+    'login': '/user/login/',
+    'products': 'api/products/'
+}
 
-// export default axios.create({
-//     baseURL: 'http://localhost:5000/'
-// }) 
+export default axios.create({
+    baseURL: 'http://localhost:5000/'
+}) 
